@@ -1,3 +1,6 @@
+/**
+ * Handles transforming a React.PropType to an equivalent flowtype
+ */
 export default function propTypeToFlowType(j, key, value) {
   /**
    * Returns an expression without `isRequired`
