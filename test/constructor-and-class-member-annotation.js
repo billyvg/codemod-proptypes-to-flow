@@ -9,3 +9,12 @@ export default class Component extends React.Component {
   componentDidMount() {
   }
 }
+
+class Component2 extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+  }
+}
