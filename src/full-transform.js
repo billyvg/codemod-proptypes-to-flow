@@ -1,24 +1,12 @@
 import transformProperties from './helpers/transformProperties';
-import createTypeAlias from './helpers/createTypeAlias.js';
-import findParentBody from './helpers/findParentBody.js';
+import createTypeAlias from './helpers/createTypeAlias';
+import findParentBody from './helpers/findParentBody';
+import annotateConstructor from './helpers/annotateConstructor';
+import findIndex from './helpers/findIndex';
 
 export default function transformer(file, api) {
   const j = api.jscodeshift;
   const {expression, statement, statements} = j.template;
-
-  const findIndex = (arr, f) => {
-    let index;
-    arr.some((val, i) => {
-      const result = f(val, i);
-      if (result) {
-        index = i;
-      }
-      return result;
-    });
-
-    return index;
-  };
-
   let root = j(file.source);
 
   const isStaticPropType = (p) => {
