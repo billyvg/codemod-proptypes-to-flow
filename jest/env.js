@@ -16,7 +16,7 @@ const fs = require('fs');
 const p = require('path');
 
 const read = fileName => fs.readFileSync(
-  p.join(__dirname, global.baseDir, 'test', fileName),
+  p.join(__dirname, '..', 'test', fileName),
   'utf8'
 );
 
