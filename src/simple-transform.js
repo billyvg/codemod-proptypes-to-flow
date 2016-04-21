@@ -1,4 +1,5 @@
-import propTypeToFlowType from './propTypeToFlowType';
+import transformProperties from './helpers/transformProperties';
+import createTypeAlias from './helpers/createTypeAlias.js';
 
 export default function transformer(file, api) {
   const j = api.jscodeshift;
@@ -8,15 +9,7 @@ export default function transformer(file, api) {
 
   return root.find(j.VariableDeclaration)
     .replaceWith(p => {
-      const flowTypes = p.value.declarations[0].init.properties.map(property => {
-          const type = propTypeToFlowType(j, property.key, property.value);
-          type.value.leadingComments = property.leadingComments;
-          type.value.comments = property.comments;
-          return type;
-      });
-      return j.typeAlias(
-        j.identifier('Props'), null, j.objectTypeAnnotation(flowTypes)
-      );
-    })
-    .toSource();
+      const flowTypes = transformProperties(j, p.value.declarations[0].init.properties);
+      return createTypeAlias(j, flowTypes);
+    }).toSource();
 };
