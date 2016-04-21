@@ -16,6 +16,10 @@ describe('React.PropTypes to flow', () => {
   });
 
   it('transforms PropTypes that are a class property', () => {
-    test('full-transform', 'class-property-proptypes');
+    test('static-properties-transform', 'class-property-proptypes');
+  });
+
+  it('Adds type annotation to `prop` parameter in constructor (ES2015)', () => {
+    test('constructor-and-class-member-transform', 'constructor-and-class-member-annotation');
   });
 });
