@@ -33,7 +33,7 @@ export default function transformer(file, api) {
 
         return p.value.object;
       }).toSource();
-      console.log(p.value.value.properties.map((prop) => {
+      p.value.value.properties.map((prop) => {
         return j(prop).find(j.MemberExpression, {
           object: {
             type: 'Identifier',
@@ -45,12 +45,12 @@ export default function transformer(file, api) {
           }
         }).replaceWith(p => p.value.property);
         return prop;
-      }));
+      });
     }
     return p.value;
   }).toSource();
 
-  } else { 
+  } else {
 
     nonStaticQuery = j(file.source).find(j.AssignmentExpression, {
       left: {
@@ -74,7 +74,7 @@ export default function transformer(file, api) {
 
           return p.value.object;
         }).toSource();
-        console.log(p.value.right.properties.map((prop) => {
+        p.value.right.properties.map((prop) => {
           return j(prop).find(j.MemberExpression, {
             object: {
               type: 'Identifier',
@@ -86,7 +86,7 @@ export default function transformer(file, api) {
             }
           }).replaceWith(p => p.value.property);
           return prop;
-        }));
+        });
       }
       return p.value;
     }).toSource();
