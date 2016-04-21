@@ -21,6 +21,7 @@ export default function transformer(file, api) {
     .forEach(p => {
       // find classes with propType static class property
       if (p.value.body && p.value.body.body) {
+        annotateConstructor(j, p.value.body.body);
         const index = findIndex(p.value.body.body, isStaticPropType)
         if (typeof index !== 'undefined') {
           const classProperty = p.value.body.body.splice(index, 1).pop();
