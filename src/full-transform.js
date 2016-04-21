@@ -21,27 +21,28 @@ export default function transformer(file, api) {
     .forEach(p => {
       // find classes with propType static class property
       if (p.value.body && p.value.body.body) {
-         const index = findIndex(p.value.body.body, isStaticPropType)
-         if (typeof index !== 'undefined') {
-           const classProperty = p.value.body.body.splice(index, 1).pop();
-           const typeAlias = createTypeAlias(
-             j, transformProperties(j, classProperty.value.properties), {
-               shouldExport: true
-           });
+        const index = findIndex(p.value.body.body, isStaticPropType)
+        if (typeof index !== 'undefined') {
+          const classProperty = p.value.body.body.splice(index, 1).pop();
+          const typeAlias = createTypeAlias(
+            j, transformProperties(j, classProperty.value.properties), {
+              shouldExport: true
+            }
+          );
 
-           // find parent
-           const {
-             child,
-             body,
-           } = findParentBody(p);
-           if (body && child) {
-             const bodyIndex = findIndex(body.value, (b) => b === child);
-             if (bodyIndex) {
-               body.value.splice(bodyIndex, 0, typeAlias);
-             }
-           }
-           return p;
-         }
+          // find parent
+          const {
+            child,
+            body,
+          } = findParentBody(p);
+          if (body && child) {
+            const bodyIndex = findIndex(body.value, (b) => b === child);
+            if (bodyIndex) {
+              body.value.splice(bodyIndex, 0, typeAlias);
+            }
+          }
+          return p;
+        }
       }
     })
     .map(p => {
