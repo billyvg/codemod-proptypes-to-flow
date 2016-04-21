@@ -1,44 +1,44 @@
-/**
- * Returns an expression without `isRequired`
- * @param {Node} node NodePath Should be the `value` of a `Property`
- * @return {Object} Object with `required`, and `node`
- */
-const getExpressionWithoutRequired = (inputNode) => {
-  // check if it's required
-  let required = false;
-  let node = inputNode;
-
-  if (inputNode.property && inputNode.property.name === 'isRequired') {
-    required = true;
-    node = inputNode.object;
-  }
-
-  return {
-    required,
-    node,
-  };
-};
-
-/**
- * Gets the PropType MemberExpression without `React` namespace
- */
-const getPropTypeExpression = (inputNode) => {
-  const base = inputNode.callee || inputNode.object;
-
-  if (inputNode.object &&
-      inputNode.object.object &&
-      inputNode.object.object.name === 'React') {
-    return j.memberExpression(
-      inputNode.object.property,
-      inputNode.property
-    );
-  } else if (inputNode.object && inputNode.object.name === 'React') {
-    return inputNode.property;
-  }
-  return inputNode;
-};
-
 export default function propTypeToFlowType(j, key, value) {
+  /**
+   * Returns an expression without `isRequired`
+   * @param {Node} node NodePath Should be the `value` of a `Property`
+   * @return {Object} Object with `required`, and `node`
+   */
+  const getExpressionWithoutRequired = (inputNode) => {
+    // check if it's required
+    let required = false;
+    let node = inputNode;
+
+    if (inputNode.property && inputNode.property.name === 'isRequired') {
+      required = true;
+      node = inputNode.object;
+    }
+
+    return {
+      required,
+      node,
+    };
+  };
+
+  /**
+   * Gets the PropType MemberExpression without `React` namespace
+   */
+  const getPropTypeExpression = (inputNode) => {
+    const base = inputNode.callee || inputNode.object;
+
+    if (inputNode.object &&
+        inputNode.object.object &&
+        inputNode.object.object.name === 'React') {
+      return j.memberExpression(
+        inputNode.object.property,
+        inputNode.property
+      );
+    } else if (inputNode.object && inputNode.object.name === 'React') {
+      return inputNode.property;
+    }
+    return inputNode;
+  };
+
   const TRANSFORM_MAP = {
     any: j.anyTypeAnnotation(),
     bool: j.booleanTypeAnnotation(),
@@ -80,8 +80,6 @@ export default function propTypeToFlowType(j, key, value) {
   required = expressionWithoutRequired.required;
   node = expressionWithoutRequired.node;
 
-  console.log(node);
-
   // Check for React namespace for MemberExpressions (i.e. React.PropTypes.string)
   if (node.object) {
     node.object = getPropTypeExpression(node.object);
@@ -90,7 +88,6 @@ export default function propTypeToFlowType(j, key, value) {
   }
 
 
-  console.log('hi', node);
   if (node.type === 'Literal') {
     returnValue = j.stringLiteralTypeAnnotation(node.value, node.raw);
   } else if (node.type === 'MemberExpression') {
@@ -130,7 +127,6 @@ export default function propTypeToFlowType(j, key, value) {
     returnValue = j.genericTypeAnnotation(node, null);
   }
 
-  console.log(returnValue);
   // finally return either an objectTypeProperty or just a property if `key` is null
   if (!key) {
     return returnValue;
