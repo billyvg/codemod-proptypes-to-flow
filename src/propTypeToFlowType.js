@@ -23,6 +23,8 @@ const getExpressionWithoutRequired = (inputNode) => {
  * Gets the PropType MemberExpression without `React` namespace
  */
 const getPropTypeExpression = (inputNode) => {
+  const base = inputNode.callee || inputNode.object;
+
   if (inputNode.object &&
       inputNode.object.object &&
       inputNode.object.object.name === 'React') {
@@ -30,11 +32,13 @@ const getPropTypeExpression = (inputNode) => {
       inputNode.object.property,
       inputNode.property
     );
+  } else if (inputNode.object && inputNode.object.name === 'React') {
+    return inputNode.property;
   }
+  return inputNode;
 };
 
 export default function propTypeToFlowType(j, key, value) {
-  console.log(node);
   const TRANSFORM_MAP = {
     any: j.anyTypeAnnotation(),
     bool: j.booleanTypeAnnotation(),
@@ -66,27 +70,31 @@ export default function propTypeToFlowType(j, key, value) {
       ),
     ]),
   };
-  let required;
-  let node;
   let returnValue;
 
-  {
-    required,
-    node,
-  } = getExpressionWithoutRequired(value);
+  let required;
+  let node;
+
+  // XXX: couldn't find how to enable stage-0 with jest
+  let expressionWithoutRequired = getExpressionWithoutRequired(value);
+  required = expressionWithoutRequired.required;
+  node = expressionWithoutRequired.node;
+
+  console.log(node);
 
   // Check for React namespace for MemberExpressions (i.e. React.PropTypes.string)
-  if (node.object){
-    node.object = getPropTypeExpression(node);
+  if (node.object) {
+    node.object = getPropTypeExpression(node.object);
   } else if (node.callee) {
     node.callee = getPropTypeExpression(node.callee);
   }
 
 
+  console.log('hi', node);
   if (node.type === 'Literal') {
     returnValue = j.stringLiteralTypeAnnotation(node.value, node.raw);
   } else if (node.type === 'MemberExpression') {
-    returnValue = TRANSFORM_MAP[node.property];
+    returnValue = TRANSFORM_MAP[node.property.name];
   } else if (node.type === 'CallExpression') {
     // instanceOf(), arrayOf(), etc..
     const name = node.callee.property.name;
@@ -95,33 +103,34 @@ export default function propTypeToFlowType(j, key, value) {
     } else if (name === 'arrayOf') {
       returnValue = j.genericTypeAnnotation(
         j.identifier('Array'), j.typeParameterInstantiation(
-          [propTypeToFlow(j, null, node.arguments[0] || j.anyTypeAnnotation())]
+          [propTypeToFlowType(j, null, node.arguments[0] || j.anyTypeAnnotation())]
         )
       );
     } else if (name === 'objectOf') {
       // TODO: Is there a direct Flow translation for this?
       returnValue = j.genericTypeAnnotation(
         j.identifier('Object'), j.typeParameterInstantiation(
-          [propTypeToFlow(j, null, node.arguments[0] || j.anyTypeAnnotation())]
+          [propTypeToFlowType(j, null, node.arguments[0] || j.anyTypeAnnotation())]
         )
       );
     } else if (name === 'shape') {
       returnValue = j.objectTypeAnnotation(
-        node.arguments[0].properties.map(arg => propTypeToFlow(j, arg.key, arg.value))
+        node.arguments[0].properties.map(arg => propTypeToFlowType(j, arg.key, arg.value))
       );
     } else if (name === 'oneOfType' || name === 'oneOf') {
       returnValue = j.unionTypeAnnotation(
-        node.arguments[0].elements.map(arg => propTypeToFlow(j, null, arg))
+        node.arguments[0].elements.map(arg => propTypeToFlowType(j, null, arg))
       );
     }
   } else if (node.type === 'ObjectExpression') {
     returnValue = j.objectTypeAnnotation(
-      node.arguments.map(arg => propTypeToFlow(j, arg.key, arg.value))
+      node.arguments.map(arg => propTypeToFlowType(j, arg.key, arg.value))
     );
   } else if (node.type === 'Identifier') {
     returnValue = j.genericTypeAnnotation(node, null);
   }
 
+  console.log(returnValue);
   // finally return either an objectTypeProperty or just a property if `key` is null
   if (!key) {
     return returnValue;
