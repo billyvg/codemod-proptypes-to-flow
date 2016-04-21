@@ -15,7 +15,7 @@ describe('React.PropTypes to flow', () => {
     test('simple-transform', 'required-proptypes');
   });
 
-  //it('transforms PropTypes with comments', () => {
-    //test('simple-transform', 'proptypes-with-comments');
-  //});
+  it('transforms PropTypes that are a class property', () => {
+    test('full-transform', 'class-property-proptypes');
+  });
 });
