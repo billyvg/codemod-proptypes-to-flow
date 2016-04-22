@@ -19,6 +19,10 @@ describe('React.PropTypes to flow', () => {
     test('static-properties-transform', 'class-property-proptypes');
   });
 
+  it('transforms PropTypes that are fined outside of class definition', () => {
+    test('full-transform', 'member-proptypes');
+  });
+
   it('Adds type annotation to `prop` parameter in constructor (ES2015)', () => {
     test('constructor-and-class-member-transform', 'constructor-and-class-member-annotation');
   });
