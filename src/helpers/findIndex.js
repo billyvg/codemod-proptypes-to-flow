@@ -10,4 +10,3 @@ export default function findIndex(arr, f) {
 
   return index;
 }
-

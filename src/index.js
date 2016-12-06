@@ -2,53 +2,50 @@ import propTypeToFlowType from './helpers/propTypeToFlowType';
 
 export default function transformer(file, api) {
   const j = api.jscodeshift;
-  const {expression, statement, statements} = j.template;
 
   let root = j(file.source);
-  let requiredProps = new Set();
-  let hasStaticProps;
+  const requiredProps = new Set();
 
   let nonStaticQuery;
   const staticPropsQuery = root.find(j.ClassProperty, {
     key: {
       type: 'Identifier',
       name: 'propTypes',
-    }
+    },
   });
 
-  hasStaticProps = staticPropsQuery.size();
+  const hasStaticProps = staticPropsQuery.size();
   if (hasStaticProps) {
   // Replace React.PropTypes
-  root = staticPropsQuery.replaceWith(p => {
-    if (p && p.value && p.value.value) {
-      j(p.value.value).find(j.MemberExpression, {
-        property: {
-          type: 'Identifier',
-          name: 'isRequired',
-        }
-      }).replaceWith(p => {
-        requiredProps.add(
+    root = staticPropsQuery.replaceWith(p => {
+      if (p && p.value && p.value.value) {
+        j(p.value.value).find(j.MemberExpression, {
+          property: {
+            type: 'Identifier',
+            name: 'isRequired',
+          },
+        }).replaceWith(p => {
+          requiredProps.add(
           p.parentPath.value.key.name
         );
 
-        return p.value.object;
-      }).toSource();
-      p.value.value.properties.map((prop) => {
-        return j(prop).find(j.MemberExpression, {
-          object: {
-            type: 'Identifier',
-            name: 'React',
-          },
-          property: {
-            type: 'Identifier',
-            name: 'PropTypes',
-          }
-        }).replaceWith(p => p.value.property);
-        return prop;
-      });
-    }
-    return p.value;
-  }).toSource();
+          return p.value.object;
+        }).toSource();
+        p.value.value.properties.map((prop) => {
+          return j(prop).find(j.MemberExpression, {
+            object: {
+              type: 'Identifier',
+              name: 'React',
+            },
+            property: {
+              type: 'Identifier',
+              name: 'PropTypes',
+            },
+          }).replaceWith(p => p.value.property);
+        });
+      }
+      return p.value;
+    }).toSource();
 
   } else {
 
@@ -66,7 +63,7 @@ export default function transformer(file, api) {
           property: {
             type: 'Identifier',
             name: 'isRequired',
-          }
+          },
         }).replaceWith(p => {
           requiredProps.add(
             p.parentPath.value.key.name
@@ -83,9 +80,8 @@ export default function transformer(file, api) {
             property: {
               type: 'Identifier',
               name: 'PropTypes',
-            }
+            },
           }).replaceWith(p => p.value.property);
-          return prop;
         });
       }
       return p.value;
@@ -100,8 +96,8 @@ export default function transformer(file, api) {
     j(root)
     .find(j.ClassProperty, {
       key: {
-        name: 'propTypes'
-      }
+        name: 'propTypes',
+      },
     })
     :
     j(root).find(j.AssignmentExpression, {
@@ -119,9 +115,6 @@ export default function transformer(file, api) {
       p.value.right.properties;
 
       flowTypes = properties.map(property => {
-        //console.log(findPropType(property.value));
-        //console.log(property, j(property).find(j.Identifier).map(p => console.log(p)))//, p.parent.parent.value.property)));
-        const optional = !requiredProps.has(property.key.name);
         const t = propTypeToFlowType(j, property.key, property.value);
         t.comments = property.comments;
         return t;
@@ -144,11 +137,9 @@ export default function transformer(file, api) {
         if (classExpression.size()) {
           index = i;
           found = classExpression;
-        } else {
-          if (p.type === 'ClassDeclaration') {
-            index = i;
-            found = p;
-          }
+        } else if (p.type === 'ClassDeclaration') {
+          index = i;
+          found = p;
         }
         let propTypeAnnotationIndex = 0;
 
@@ -175,7 +166,7 @@ export default function transformer(file, api) {
               j.typeAnnotation(
                 j.genericTypeAnnotation(j.identifier('Props'), null)
               )
-           	)
+            )
           );
         }
         return found;
@@ -185,4 +176,4 @@ export default function transformer(file, api) {
   } else {
     return j(root).toSource({quote: 'single' });
   }
-};
+}
