@@ -1,4 +1,4 @@
-import propTypeToFlowType from './propTypeToFlowType';
+import propTypeToFlowType from './helpers/propTypeToFlowType';
 
 export default function transformer(file, api) {
   const j = api.jscodeshift;
@@ -117,7 +117,7 @@ export default function transformer(file, api) {
     p => {
       const properties = hasStaticProps ? p.value.value.properties :
       p.value.right.properties;
-      
+
       flowTypes = properties.map(property => {
         //console.log(findPropType(property.value));
         //console.log(property, j(property).find(j.Identifier).map(p => console.log(p)))//, p.parent.parent.value.property)));
