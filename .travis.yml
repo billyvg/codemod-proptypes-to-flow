@@ -1,5 +1,12 @@
 language: node_js
 node_js:
-  - 7
-  - 6
-sudo: false
+  - '7'
+  - '6'
+  - '4'
+script:
+  - npm prune
+  - npm update
+  - npm run prepublish
+cache:
+  directories:
+    - node_modules
