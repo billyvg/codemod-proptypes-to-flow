@@ -3,13 +3,11 @@ import createTypeAlias from './helpers/createTypeAlias.js';
 
 export default function transformer(file, api) {
   const j = api.jscodeshift;
-  const {expression, statement, statements} = j.template;
-  let flowTypes;
-  let root = j(file.source);
+  const root = j(file.source);
 
   return root.find(j.VariableDeclaration)
     .replaceWith(p => {
       const flowTypes = transformProperties(j, p.value.declarations[0].init.properties);
       return createTypeAlias(j, flowTypes);
     }).toSource();
-};
+}

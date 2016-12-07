@@ -27,8 +27,6 @@ export default function propTypeToFlowType(j, key, value) {
    * Gets the PropType MemberExpression without `React` namespace
    */
   const getPropTypeExpression = (inputNode) => {
-    const base = inputNode.callee || inputNode.object;
-
     if (inputNode.object &&
         inputNode.object.object &&
         inputNode.object.object.name === 'React') {
@@ -75,13 +73,9 @@ export default function propTypeToFlowType(j, key, value) {
   };
   let returnValue;
 
-  let required;
-  let node;
-
-  // XXX: couldn't find how to enable stage-0 with jest
-  let expressionWithoutRequired = getExpressionWithoutRequired(value);
-  required = expressionWithoutRequired.required;
-  node = expressionWithoutRequired.node;
+  const expressionWithoutRequired = getExpressionWithoutRequired(value);
+  const required = expressionWithoutRequired.required;
+  const node = expressionWithoutRequired.node;
 
   // Check for React namespace for MemberExpressions (i.e. React.PropTypes.string)
   if (node.object) {

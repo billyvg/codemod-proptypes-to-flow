@@ -6,7 +6,6 @@ import findIndex from './helpers/findIndex';
 
 export default function transformer(file, api) {
   const j = api.jscodeshift;
-  const {expression, statement, statements} = j.template;
   let root = j(file.source);
 
   const isStaticPropType = (p) => {
@@ -25,7 +24,7 @@ export default function transformer(file, api) {
     let properties;
     if (p.value.body && p.value.body.body) {
       annotateConstructor(j, p.value.body.body);
-      const index = findIndex(p.value.body.body, isStaticPropType)
+      const index = findIndex(p.value.body.body, isStaticPropType);
       if (typeof index !== 'undefined') {
         const classProperty = p.value.body.body.splice(index, 1).pop();
         properties = classProperty.value.properties;
@@ -56,7 +55,7 @@ export default function transformer(file, api) {
       if (properties) {
         const typeAlias = createTypeAlias(
           j, transformProperties(j, properties), {
-            shouldExport: true
+            shouldExport: true,
           }
         );
 
@@ -90,8 +89,8 @@ export default function transformer(file, api) {
       right: {
         type: 'ObjectExpression',
       },
-    }
+    },
   }).filter(p => classNames.indexOf(p.value.expression.left.object.name) > -1)
   .replaceWith(p => '')
   .toSource();
-};
+}
