@@ -1,4 +1,7 @@
-type Props = {
+/* @flow */
+import React from 'react';
+
+export type Props = {
   requiredArray: Array<any>,
   requiredBool: boolean,
   requiredFunc: Function,
@@ -8,7 +11,7 @@ type Props = {
   requiredNode: number | string | React.Element | Array<any>,
   requiredElement: React.Element,
   requiredMessage: Message,
-  requiredEnum: "News" | "Photos",
+  requiredEnum: 'News' | 'Photos',
   requiredUnion: string | number | Message,
   requiredArrayOf: Array<number>,
   requiredObjectOf: Object<number>,
@@ -17,3 +20,11 @@ type Props = {
     fontSize: number,
   },
 };
+
+export function Button(props: Props) {
+  return (
+    <button>
+      {React.Children.toArray(children)}
+    </button>
+  );
+}

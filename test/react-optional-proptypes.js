@@ -1,4 +1,9 @@
-const propTypes = {
+import React from 'react';
+
+export const F = props =>
+	<div></div>;
+
+F.propTypes = {
   optionalArray: React.PropTypes.array,
   optionalBool: React.PropTypes.bool,
   optionalFunc: React.PropTypes.func,

@@ -1,3 +1,4 @@
+/* @flow */
 import React from 'react';
 
 export type Props = {
@@ -10,7 +11,7 @@ export type Props = {
   optionalNode?: number | string | React.Element | Array<any>,
   optionalElement?: React.Element,
   optionalMessage?: Message,
-  optionalEnum?: "News" | "Photos",
+  optionalEnum?: 'News' | 'Photos',
   optionalUnion?: string | number | Message,
   optionalArrayOf?: Array<number>,
   optionalObjectOf?: Object<number>,
@@ -23,7 +24,8 @@ export type Props = {
 };
 
 export default class Test extends React.Component {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
   }
+  props: Props;
 }

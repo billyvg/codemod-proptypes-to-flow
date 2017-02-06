@@ -1,4 +1,7 @@
-type Props = {
+/* @flow */
+import React from 'react';
+
+export type Props = {
   optionalArray?: Array<any>,
   optionalBool?: boolean,
   optionalFunc?: Function,
@@ -8,7 +11,7 @@ type Props = {
   optionalNode?: number | string | React.Element | Array<any>,
   optionalElement?: React.Element,
   optionalMessage?: Message,
-  optionalEnum?: "News" | "Photos",
+  optionalEnum?: 'News' | 'Photos',
   optionalUnion?: string | number | Message,
   optionalArrayOf?: Array<number>,
   optionalObjectOf?: Object<number>,
@@ -17,3 +20,6 @@ type Props = {
     fontSize?: number,
   },
 };
+
+export const F = (props: Props) =>
+	<div></div>;

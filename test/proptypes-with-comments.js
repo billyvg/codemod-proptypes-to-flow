@@ -1,4 +1,14 @@
-const propTypes = {
+import React from 'react';
+
+function Button(props) {
+  return (
+    <button>
+      {React.Children.toArray(children)}
+    </button>
+  );
+}
+
+Button.propTypes = {
   // You can declare that a prop is a specific JS primitive. By default, these
   // are all optional.
   optionalArray: React.PropTypes.array,

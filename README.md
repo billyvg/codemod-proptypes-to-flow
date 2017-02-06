@@ -1,5 +1,5 @@
 # codemod-proptypes-to-flow [![Build Status](https://travis-ci.org/billyvg/codemod-proptypes-to-flow.svg?branch=master)](https://travis-ci.org/billyvg/codemod-proptypes-to-flow)
-Removes `React.PropTypes` and attempts to transform to [Flow](http://flowtype.org/). Currently only supports `propTypes` defined as static class properties using ES2015 classes.
+Removes `React.PropTypes` and attempts to transform to [Flow](http://flowtype.org/).
 
 ### Setup & Run
   * `npm install -g jscodeshift`
@@ -11,4 +11,3 @@ Removes `React.PropTypes` and attempts to transform to [Flow](http://flowtype.or
 ### Not working/Implemented yet
   * Custom validators
   * `React.createClass`
-  * Stateless functions

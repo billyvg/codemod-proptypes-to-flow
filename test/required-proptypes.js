@@ -1,4 +1,14 @@
-const propTypes = {
+import React, { PropTypes } from 'react';
+
+export function Button(props) {
+  return (
+    <button>
+      {React.Children.toArray(children)}
+    </button>
+  );
+}
+
+Button.propTypes = {
   requiredArray: PropTypes.array.isRequired,
   requiredBool: PropTypes.bool.isRequired,
   requiredFunc: PropTypes.func.isRequired,

@@ -1,4 +1,7 @@
-type Props = {
+/* @flow */
+import React from 'react';
+
+export type Props = {
   // You can declare that a prop is a specific JS primitive. By default, these
   // are all optional.
   optionalArray?: Array<any>,
@@ -21,7 +24,7 @@ type Props = {
 
   // You can ensure that your prop is limited to specific values by treating
   // it as an enum.
-  optionalEnum?: "News" | "Photos",
+  optionalEnum?: 'News' | 'Photos',
 
   // An object that could be one of many types
   optionalUnion?: string | number | Message,
@@ -45,3 +48,11 @@ type Props = {
   // A value of any data type
   requiredAny: any,
 };
+
+function Button(props: Props) {
+  return (
+    <button>
+      {React.Children.toArray(children)}
+    </button>
+  );
+}

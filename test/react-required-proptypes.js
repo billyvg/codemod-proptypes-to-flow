@@ -1,4 +1,15 @@
-const propTypes = {
+/* eslint */
+import React from 'react';
+
+function Button(props) {
+  return (
+    <button>
+      {React.Children.toArray(children)}
+    </button>
+  );
+}
+
+Button.propTypes = {
   requiredArray: React.PropTypes.array.isRequired,
   requiredBool: React.PropTypes.bool.isRequired,
   requiredFunc: React.PropTypes.func.isRequired,
@@ -20,4 +31,16 @@ const propTypes = {
     color: React.PropTypes.string.isRequired,
     fontSize: React.PropTypes.number.isRequired,
   }).isRequired,
+};
+
+function Button2({ requiredArray }) {
+  return (
+    <button>
+      {React.Children.toArray(children)}
+    </button>
+  );
+}
+
+Button2.propTypes = {
+  requiredArray: React.PropTypes.array.isRequired,
 };

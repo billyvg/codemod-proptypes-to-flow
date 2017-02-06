@@ -1,3 +1,4 @@
+/* @flow */
 import React from 'react';
 
 export type Props = {
@@ -23,7 +24,7 @@ export type Props = {
 
   // You can ensure that your prop is limited to specific values by treating
   // it as an enum.
-  optionalEnum?: "News" | "Photos",
+  optionalEnum?: 'News' | 'Photos',
 
   // An object that could be one of many types
   optionalUnion?: string | number | Message,

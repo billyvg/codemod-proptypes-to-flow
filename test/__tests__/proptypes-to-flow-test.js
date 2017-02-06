@@ -1,31 +1,22 @@
-'use strict';
-
+/* eslint-env jest */
 const fs = require('fs');
 const p = require('path');
+const jscodeshift = require('jscodeshift');
+
+const transform = require('../../src/index').default;
 
 const read = fileName => fs.readFileSync(
   p.join(__dirname, '..', fileName),
   'utf8'
 );
 
-const test = (transformName, testFileName, options, fakeOptions) => {
-  const jscodeshift = require('jscodeshift');
-  const source = read(testFileName + '.js');
-  const output = read(testFileName + '.output.js');
-  let path = testFileName + '.js';
-  let transform = require(
-    p.join(p.join(__dirname, '../../src'), transformName)
-  );
-  if (transform.default) {
-    transform = transform.default;
-  }
-
-  if (fakeOptions && fakeOptions.path) {
-    path = fakeOptions.path;
-  }
+const test = (testFileName, options) => {
+  const source = read(`${testFileName}.js`);
+  const output = read(`${testFileName}.output.js`);
+  const path = `${testFileName}.js`;
 
   expect(
-    (transform({path, source}, {jscodeshift}, options || {}) || '').trim()
+    (transform({path, source}, {jscodeshift}, {}) || '').trim()
   ).toEqual(
     output.trim()
   );
@@ -33,30 +24,30 @@ const test = (transformName, testFileName, options, fakeOptions) => {
 
 describe('React.PropTypes to flow', () => {
   it('transforms optional PropTypes prefixed with `React`', () => {
-    test('simple-transform', 'react-optional-proptypes');
+    test('react-optional-proptypes');
   });
 
   it('transforms required PropTypes prefixed with `React`', () => {
-    test('simple-transform', 'react-required-proptypes');
+    test('react-required-proptypes');
   });
 
   it('transforms optional PropTypes with no `React` prefix', () => {
-    test('simple-transform', 'optional-proptypes');
+    test('optional-proptypes');
   });
 
   it('transforms required PropTypes with no `React` prefix', () => {
-    test('simple-transform', 'required-proptypes');
+    test('required-proptypes');
   });
 
   it('transforms PropTypes that are a class property', () => {
-    test('static-properties-transform', 'class-property-proptypes');
+    test('class-property-proptypes');
   });
 
-  it('transforms PropTypes that are fined outside of class definition', () => {
-    test('full-transform', 'member-proptypes');
+  it('transforms PropTypes that are defined outside of class definition', () => {
+    test('member-proptypes');
   });
 
   it('Adds type annotation to `prop` parameter in constructor (ES2015)', () => {
-    test('constructor-and-class-member-transform', 'constructor-and-class-member-annotation');
+    test('constructor-and-class-member-annotation');
   });
 });

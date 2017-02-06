@@ -1,4 +1,14 @@
-const propTypes = {
+import React, { PropTypes } from 'react';
+
+function Button(props) {
+  return (
+    <button>
+      {React.Children.toArray(children)}
+    </button>
+  );
+}
+
+Button.propTypes = {
   optionalArray: PropTypes.array,
   optionalBool: PropTypes.bool,
   optionalFunc: PropTypes.func,
