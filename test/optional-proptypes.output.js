@@ -1,5 +1,5 @@
 /* @flow */
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export type Props = {
   optionalArray?: Array<any>,

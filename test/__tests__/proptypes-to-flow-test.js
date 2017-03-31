@@ -11,6 +11,7 @@ const read = fileName => fs.readFileSync(
 );
 
 const test = (testFileName, options) => {
+  // TODO: we could just use snapshot testing...
   const source = read(`${testFileName}.js`);
   const output = read(`${testFileName}.output.js`);
   const path = `${testFileName}.js`;
