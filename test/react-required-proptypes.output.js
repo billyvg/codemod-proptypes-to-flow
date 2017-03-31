@@ -1,5 +1,5 @@
-/* eslint */
 /* @flow */
+/* eslint */
 import React from 'react';
 
 export type ButtonProps = {
