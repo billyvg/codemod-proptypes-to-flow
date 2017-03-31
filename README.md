@@ -3,8 +3,8 @@ Removes `React.PropTypes` and attempts to transform to [Flow](http://flowtype.or
 
 ### Setup & Run
   * `npm install -g jscodeshift`
-  * `git clone https://github.com/billyvg/codemod-proptypes-to-flow` 
-  * `jscodeshift -t <codemod-script> <path>`
+  * `git clone https://github.com/billyvg/codemod-proptypes-to-flow`
+  * `jscodeshift -t codemod-proptypes-to-flow/src/index.js <path>`
   * Use the `-d` option for a dry-run and use `-p` to print the output
     for comparison
 
