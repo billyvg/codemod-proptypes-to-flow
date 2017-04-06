@@ -26,5 +26,7 @@ export default function transformer(file, api) {
   if (classModifications || functionalModifications) {
     addFlowComment(j, root);
     return root.toSource({quote: 'single', trailingComma: true });
+  } else {
+    return file.source;
   }
 }

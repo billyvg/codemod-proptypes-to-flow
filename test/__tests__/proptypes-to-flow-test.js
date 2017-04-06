@@ -10,6 +10,10 @@ const read = fileName => fs.readFileSync(
   'utf8'
 );
 
+const transformString = (source, path = 'test.js') => {
+  return transform({path, source}, {jscodeshift}, {});
+};
+
 const test = (testFileName, options) => {
   // TODO: we could just use snapshot testing...
   const source = read(`${testFileName}.js`);
@@ -51,4 +55,46 @@ describe('React.PropTypes to flow', () => {
   it('Adds type annotation to `prop` parameter in constructor (ES2015)', () => {
     test('constructor-and-class-member-annotation');
   });
+
+  it('Does not touch files without PropTypes', () => {
+    // TODO: Maybe add @flow type
+    const input = `
+      import React from 'react';
+      import { View } from 'react-native';
+      import PureComponent from './PureComponent';
+
+      class Cards extends PureComponent {
+        render() {
+          return (
+            <View />
+          );
+        }
+      }
+
+      export default Cards;
+    `;
+
+    expect(transformString(input)).toEqual(input);
+  });
+
+  it('Does not touch files without PropTypes (constructor)', () => {
+    // TODO: Maybe add @flow type
+    const input = `
+      import { Component } from 'react';
+      import PureRenderMixin from 'react-addons-pure-render-mixin';
+
+      class PureComponent extends Component {
+        constructor(props) {
+          super(props);
+
+          this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+        }
+      }
+
+      export default PureComponent;
+    `;
+
+    expect(transformString(input)).toEqual(input);
+  });
+
 });
