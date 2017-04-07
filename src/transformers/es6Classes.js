@@ -21,9 +21,11 @@ export default function transformEs6Classes(ast, j) {
 
   const classNamesWithPropsOutside = [];
 
-  // NOTE: reactUtils.findReactES6ClassDeclaration misses extends for local
-  // imported components.
-  const reactClassPaths = reactUtils.findReactES6ClassDeclaration(ast);
+  // NOTE: reactUtils.findReactES6ClassDeclaration(ast) is missing extends
+  // for local imported components... If finding all classes is too greety,
+  // we might combine findReactES6ClassDeclaration with classes that have a
+  // render method.
+  const reactClassPaths = ast.find(j.ClassDeclaration);
 
   // find classes with propType static class property
   const modifications = reactClassPaths.forEach(p => {
