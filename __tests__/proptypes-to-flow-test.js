@@ -12,7 +12,7 @@ describe('React.PropTypes to flow', () => {
     const input = `
       import React from 'react';
 
-      export const F = props =>
+      export const F = (props) =>
         <div></div>;
 
       F.propTypes = {
