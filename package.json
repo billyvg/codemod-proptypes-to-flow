@@ -5,10 +5,12 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "check": "npm run lint && npm run test",
+    "check": "npm run lint && npm run test:coverage",
     "prepublish": "npm run check && npm run build",
-    "lint": "eslint src --fix",
-    "test": "jest"
+    "lint": "eslint src __tests__ --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -40,8 +42,12 @@
     "jscodeshift": "^0.3.30"
   },
   "jest": {
-    "roots": [
-      "test"
-    ]
+    "collectCoverageFrom": ["src/**/*.js"],
+    "coverageReporters": ["text", "html"],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/__tests__/"
+    ],
+    "testEnvironment": "node"
   }
 }

@@ -2,3 +2,5 @@ node_modules
 npm-debug.log*
 lib
 .DS_Store
+coverage
+yarn.lock
