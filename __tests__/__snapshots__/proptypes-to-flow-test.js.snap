@@ -362,3 +362,24 @@ exports[`React.PropTypes to flow transforms required PropTypes with no \`React\`
       }
     "
 `;
+
+exports[`React.PropTypes to flow transforms something that just looks like React class 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+      import PureComponent from '../PureComponent';
+
+      export type Props = { optionalArray?: Array<any> };
+
+      class Test extends PureComponent {
+        props: Props;
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default Test;
+    "
+`;

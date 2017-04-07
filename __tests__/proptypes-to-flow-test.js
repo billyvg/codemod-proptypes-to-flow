@@ -409,4 +409,27 @@ describe('React.PropTypes to flow', () => {
     expect(transformString(input)).toMatchSnapshot();
   });
 
+  it('transforms something that just looks like React class', () => {
+    const input = `
+      import React from 'react';
+      import PureComponent from '../PureComponent';
+
+      class Test extends PureComponent {
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      Test.propTypes = {
+        optionalArray: React.PropTypes.array,
+      };
+
+      export default Test;
+    `;
+
+    expect(transformString(input)).toMatchSnapshot();
+  });
+
 });
