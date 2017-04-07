@@ -18,13 +18,17 @@ const isStaticPropType = (p) => {
 export default function transformEs6Classes(ast, j) {
   const classNames = [];
 
-  // find classes
-  const modifications = ast.find(j.ClassDeclaration).forEach(p => {
-    // find classes with propType static class property
+  // TODO: find only React classes
+  const reactClassPaths = ast.find(j.ClassDeclaration);
 
+  reactClassPaths.forEach(p => {
+    // find classes with propType static class property
+    const className = p.value.id.name;
+    const propIdentifier = reactClassPaths.length === 1 ? 'Props' : `${className}Props`;
     let properties;
+
     if (p.value.body && p.value.body.body) {
-      annotateConstructor(j, p.value.body.body);
+      annotateConstructor(j, p.value.body.body, propIdentifier);
       const index = findIndex(p.value.body.body, isStaticPropType);
       if (typeof index !== 'undefined') {
         const classProperty = p.value.body.body.splice(index, 1).pop();
@@ -55,31 +59,28 @@ export default function transformEs6Classes(ast, j) {
         .remove();
       }
 
-      if (properties) {
-        const typeAlias = createTypeAlias(
-          j, transformProperties(j, properties), {
-            shouldExport: true,
-          }
-        );
-
-        // Find location to put propTypes flowtype definition
-        // This will place ahead of class def
-        const {
-          child,
-          body,
-        } = findParentBody(p);
-        if (body && child) {
-          const bodyIndex = findIndex(body.value, (b) => b === child);
-          if (bodyIndex) {
-            body.value.splice(bodyIndex, 0, typeAlias);
-          }
+      properties = properties || [];
+      const typeAlias = createTypeAlias(
+        j, transformProperties(j, properties), {
+          name: propIdentifier,
+          shouldExport: true,
         }
-        return p;
-      }
+      );
 
+      // Find location to put propTypes flowtype definition
+      // This will place ahead of class def
+      const {
+        child,
+        body,
+      } = findParentBody(p);
+      if (body && child) {
+        const bodyIndex = findIndex(body.value, (b) => b === child);
+        if (bodyIndex) {
+          body.value.splice(bodyIndex, 0, typeAlias);
+        }
+      }
     }
-  })
-  .size() > 0;
+  });
 
   ast.find(j.ExpressionStatement, {
     expression: {
@@ -95,9 +96,8 @@ export default function transformEs6Classes(ast, j) {
       },
     },
   })
-  // TODO: could be done in query above:
   .filter(p => classNames.indexOf(p.value.expression.left.object.name) > -1)
   .remove();
 
-  return modifications;
+  return reactClassPaths.length > 0;
 }
