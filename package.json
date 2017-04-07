@@ -42,8 +42,13 @@
     "jscodeshift": "^0.3.30"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.js"],
-    "coverageReporters": ["text", "html"],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/__tests__/"
