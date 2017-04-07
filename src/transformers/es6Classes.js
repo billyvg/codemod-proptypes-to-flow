@@ -3,6 +3,7 @@ import createTypeAlias from '../helpers/createTypeAlias';
 import findIndex from '../helpers/findIndex';
 import findParentBody from '../helpers/findParentBody';
 import transformProperties from '../helpers/transformProperties';
+import ReactUtils from '../helpers/ReactUtils';
 
 const isStaticPropType = (p) => {
   return p.type === 'ClassProperty' &&
@@ -16,33 +17,36 @@ const isStaticPropType = (p) => {
  * @return true if any components were transformed.
  */
 export default function transformEs6Classes(ast, j) {
-  const classNames = [];
+  const reactUtils = ReactUtils(j);
 
-  // TODO: find only React classes
-  const reactClassPaths = ast.find(j.ClassDeclaration);
+  const classNamesWithPropsOutside = [];
 
-  reactClassPaths.forEach(p => {
-    // find classes with propType static class property
-    const className = p.value.id.name;
+  // NOTE: reactUtils.findReactES6ClassDeclaration misses extends for local
+  // imported components.
+  const reactClassPaths = reactUtils.findReactES6ClassDeclaration(ast);
+
+  // find classes with propType static class property
+  const modifications = reactClassPaths.forEach(p => {
+    const className = reactUtils.getComponentName(p);
     const propIdentifier = reactClassPaths.length === 1 ? 'Props' : `${className}Props`;
     let properties;
 
-    if (p.value.body && p.value.body.body) {
-      annotateConstructor(j, p.value.body.body, propIdentifier);
-      const index = findIndex(p.value.body.body, isStaticPropType);
+    const classBody = p.value.body && p.value.body.body;
+    if (classBody) {
+      annotateConstructor(j, classBody, propIdentifier);
+      const index = findIndex(classBody, isStaticPropType);
       if (typeof index !== 'undefined') {
-        const classProperty = p.value.body.body.splice(index, 1).pop();
+        const classProperty = classBody.splice(index, 1).pop();
         properties = classProperty.value.properties;
       } else {
         // look for propTypes defined elsewhere
-        const className = p.value.id;
-        classNames.push(className.name);
+        classNamesWithPropsOutside.push(className);
 
         ast.find(j.AssignmentExpression, {
           left: {
             type: 'MemberExpression',
             object: {
-              name: className.name,
+              name: className,
             },
             property: {
               name: 'propTypes',
@@ -80,7 +84,7 @@ export default function transformEs6Classes(ast, j) {
         }
       }
     }
-  });
+  }).size();
 
   ast.find(j.ExpressionStatement, {
     expression: {
@@ -96,8 +100,8 @@ export default function transformEs6Classes(ast, j) {
       },
     },
   })
-  .filter(p => classNames.indexOf(p.value.expression.left.object.name) > -1)
+  .filter(p => classNamesWithPropsOutside.indexOf(p.value.expression.left.object.name) > -1)
   .remove();
 
-  return reactClassPaths.length > 0;
+  return modifications > 0;
 }

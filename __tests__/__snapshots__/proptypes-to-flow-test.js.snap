@@ -5,11 +5,10 @@ exports[`React.PropTypes to flow add empty PropTypes (no constructor) 1`] = `
       /* @flow */
       import React from 'react';
       import { View } from 'react-native';
-      import PureComponent from './PureComponent';
 
       export type Props = {};
 
-      class Cards extends PureComponent {
+      class Cards extends React.Component {
         props: Props;
         render() {
           return (
@@ -26,6 +25,7 @@ exports[`React.PropTypes to flow adds empty PropTypes (constructor) 1`] = `
 "
       /* @flow */
       import { Component } from 'react';
+      import { View } from 'react-native';
       import PureRenderMixin from 'react-addons-pure-render-mixin';
 
       export type Props = {};
@@ -37,6 +37,11 @@ exports[`React.PropTypes to flow adds empty PropTypes (constructor) 1`] = `
           this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
         }
         props: Props;
+        render() {
+          return (
+            <View />
+          );
+        }
       }
 
       export default PureComponent;
@@ -73,6 +78,17 @@ exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in c
         componentDidMount() {
         }
       }
+    "
+`;
+
+exports[`React.PropTypes to flow does not touch non React classes 1`] = `
+"
+      class PureComponent extends Class {
+        constructor() {
+        }
+      }
+
+      export default PureComponent;
     "
 `;
 

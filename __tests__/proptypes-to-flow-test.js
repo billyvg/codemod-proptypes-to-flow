@@ -356,9 +356,8 @@ describe('React.PropTypes to flow', () => {
     const input = `
       import React from 'react';
       import { View } from 'react-native';
-      import PureComponent from './PureComponent';
 
-      class Cards extends PureComponent {
+      class Cards extends React.Component {
         render() {
           return (
             <View />
@@ -375,6 +374,7 @@ describe('React.PropTypes to flow', () => {
   it('adds empty PropTypes (constructor)', () => {
     const input = `
       import { Component } from 'react';
+      import { View } from 'react-native';
       import PureRenderMixin from 'react-addons-pure-render-mixin';
 
       class PureComponent extends Component {
@@ -382,6 +382,24 @@ describe('React.PropTypes to flow', () => {
           super(props);
 
           this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+        }
+        render() {
+          return (
+            <View />
+          );
+        }
+      }
+
+      export default PureComponent;
+    `;
+
+    expect(transformString(input)).toMatchSnapshot();
+  });
+
+  it('does not touch non React classes', () => {
+    const input = `
+      class PureComponent extends Class {
+        constructor() {
         }
       }
 

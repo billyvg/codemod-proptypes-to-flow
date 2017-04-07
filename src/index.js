@@ -1,5 +1,6 @@
 import transformEs6ClassComponents from './transformers/es6Classes';
 import transformFunctionalComponents from './transformers/functional';
+import ReactUtils from './helpers/ReactUtils';
 
 function addFlowComment(j, ast) {
   const getBodyNode = () => ast.find(j.Program).get('body', 0).node;
@@ -19,6 +20,11 @@ function addFlowComment(j, ast) {
 export default function transformer(file, api) {
   const j = api.jscodeshift;
   const root = j(file.source);
+
+  const reactUtils = ReactUtils(j);
+  if (!reactUtils.hasReact(root)) {
+    return file.source;
+  }
 
   const classModifications = transformEs6ClassComponents(root, j);
   const functionalModifications = transformFunctionalComponents(root, j);
