@@ -1,0 +1,385 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`React.PropTypes to flow add empty PropTypes (no constructor) 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+      import { View } from 'react-native';
+
+      export type Props = {};
+
+      class Cards extends React.Component {
+        props: Props;
+        render() {
+          return (
+            <View />
+          );
+        }
+      }
+
+      export default Cards;
+    "
+`;
+
+exports[`React.PropTypes to flow adds empty PropTypes (constructor) 1`] = `
+"
+      /* @flow */
+      import { Component } from 'react';
+      import { View } from 'react-native';
+      import PureRenderMixin from 'react-addons-pure-render-mixin';
+
+      export type Props = {};
+
+      class PureComponent extends Component {
+        constructor(props: Props) {
+          super(props);
+
+          this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+        }
+        props: Props;
+        render() {
+          return (
+            <View />
+          );
+        }
+      }
+
+      export default PureComponent;
+    "
+`;
+
+exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in constructor (ES2015) 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+
+      export type ComponentProps = {};
+
+      export default class Component extends React.Component {
+        constructor(props: ComponentProps) {
+          super(props);
+        }
+
+        props: ComponentProps;
+
+        componentDidMount() {
+        }
+      }
+
+      export type Component2Props = {};
+
+      class Component2 extends React.Component {
+        constructor(props: Component2Props) {
+          super(props);
+        }
+
+        props: Component2Props;
+
+        componentDidMount() {
+        }
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow does not touch non React classes 1`] = `
+"
+      class PureComponent extends Class {
+        constructor() {
+        }
+      }
+
+      export default PureComponent;
+    "
+`;
+
+exports[`React.PropTypes to flow preserves comments 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+
+      export type Props = {
+        // You can declare that a prop is a specific JS primitive. By default, these
+        // are all optional.
+        optionalArray?: Array<any>,
+        optionalBool?: boolean,
+        optionalFunc?: Function,
+        optionalNumber?: number,
+        optionalObject?: Object,
+        optionalString?: string,
+        // Anything that can be rendered: numbers, strings, elements or an array
+        // (or fragment) containing these types.
+        optionalNode?: number | string | React.Element | Array<any>,
+        // A React element.
+        optionalElement?: React.Element,
+        // You can also declare that a prop is an instance of a class. This uses
+        // JS's instanceof operator.
+        optionalMessage?: Message,
+        // You can ensure that your prop is limited to specific values by treating
+        // it as an enum.
+        optionalEnum?: 'News' | 'Photos',
+        // An object that could be one of many types
+        optionalUnion?: string | number | Message,
+        // An array of a certain type
+        optionalArrayOf?: Array<number>,
+        // An object with property values of a certain type
+        optionalObjectOf?: Object<number>,
+        // An object taking on a particular shape
+        optionalObjectWithShape?: {
+          color?: string,
+          fontSize?: number,
+        },
+        // You can chain any of the above with \`isRequired\` to make sure a warning
+        // is shown if the prop isn't provided.
+        requiredFunc: Function,
+        // A value of any data type
+        requiredAny: any,
+      };
+
+      function Button(props: Props) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow transforms PropTypes that are a class property 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+
+      export type Props = {
+        optionalArray?: Array<any>,
+        optionalBool?: boolean,
+        optionalFunc?: Function,
+        optionalNumber?: number,
+        optionalObject?: Object,
+        optionalString?: string,
+        optionalNode?: number | string | React.Element | Array<any>,
+        optionalElement?: React.Element,
+        optionalMessage?: Message,
+        optionalEnum?: 'News' | 'Photos',
+        optionalUnion?: string | number | Message,
+        optionalArrayOf?: Array<number>,
+        optionalObjectOf?: Object<number>,
+        optionalObjectWithShape?: {
+          color?: string,
+          fontSize?: number,
+        },
+        requiredFunc: Function,
+        requiredAny: any,
+      };
+
+      export default class Test extends React.Component {
+        constructor(props: Props) {
+          super(props);
+        }
+        props: Props;
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow transforms PropTypes that are defined outside of class definition 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+
+      export type Props = {
+        optionalArray?: Array<any>,
+        optionalBool?: boolean,
+        optionalFunc?: Function,
+        optionalNumber?: number,
+        optionalObject?: Object,
+        optionalString?: string,
+        optionalNode?: number | string | React.Element | Array<any>,
+        optionalElement?: React.Element,
+        optionalMessage?: Message,
+        optionalEnum?: 'News' | 'Photos',
+        optionalUnion?: string | number | Message,
+        optionalArrayOf?: Array<number>,
+        optionalObjectOf?: Object<number>,
+        optionalObjectWithShape?: {
+          color?: string,
+          fontSize?: number,
+        },
+        requiredFunc: Function,
+        requiredAny: any,
+      };
+
+      export default class Test extends React.Component {
+        props: Props;
+        componentDidMount() {
+        }
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow transforms optional PropTypes prefixed with \`React\` 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+
+      export type Props = {
+        optionalArray?: Array<any>,
+        optionalBool?: boolean,
+        optionalFunc?: Function,
+        optionalNumber?: number,
+        optionalObject?: Object,
+        optionalString?: string,
+        optionalNode?: number | string | React.Element | Array<any>,
+        optionalElement?: React.Element,
+        optionalMessage?: Message,
+        optionalEnum?: 'News' | 'Photos',
+        optionalUnion?: string | number | Message,
+        optionalArrayOf?: Array<number>,
+        optionalObjectOf?: Object<number>,
+        optionalObjectWithShape?: {
+          color?: string,
+          fontSize?: number,
+        },
+      };
+
+      export const F = (props: Props) =>
+        <div></div>;
+    "
+`;
+
+exports[`React.PropTypes to flow transforms optional PropTypes with no \`React\` prefix 1`] = `
+"
+      /* @flow */
+      import React, { PropTypes } from 'react';
+
+      export type Props = {
+        optionalArray?: Array<any>,
+        optionalBool?: boolean,
+        optionalFunc?: Function,
+        optionalNumber?: number,
+        optionalObject?: Object,
+        optionalString?: string,
+        optionalNode?: number | string | React.Element | Array<any>,
+        optionalElement?: React.Element,
+        optionalMessage?: Message,
+        optionalEnum?: 'News' | 'Photos',
+        optionalUnion?: string | number | Message,
+        optionalArrayOf?: Array<number>,
+        optionalObjectOf?: Object<number>,
+        optionalObjectWithShape?: {
+          color?: string,
+          fontSize?: number,
+        },
+      };
+
+      function Button(props: Props) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow transforms required PropTypes prefixed with \`React\` 1`] = `
+"
+      /* @flow */
+      /* eslint */
+      import React from 'react';
+
+      export type ButtonProps = {
+        requiredArray: Array<any>,
+        requiredBool: boolean,
+        requiredFunc: Function,
+        requiredNumber: number,
+        requiredObject: Object,
+        requiredString: string,
+        requiredNode: number | string | React.Element | Array<any>,
+        requiredElement: React.Element,
+        requiredMessage: Message,
+        requiredEnum: 'News' | 'Photos',
+        requiredUnion: string | number | Message,
+        requiredArrayOf: Array<number>,
+        requiredObjectOf: Object<number>,
+        requiredObjectWithShape: {
+          color: string,
+          fontSize: number,
+        },
+      };
+
+      function Button(props: ButtonProps) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+
+      export type Button2Props = { requiredArray: Array<any> };
+
+      function Button2(props: Button2Props) {
+        const { requiredArray } = props;
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow transforms required PropTypes with no \`React\` prefix 1`] = `
+"
+      /* @flow */
+      import React, { PropTypes } from 'react';
+
+      export type Props = {
+        requiredArray: Array<any>,
+        requiredBool: boolean,
+        requiredFunc: Function,
+        requiredNumber: number,
+        requiredObject: Object,
+        requiredString: string,
+        requiredNode: number | string | React.Element | Array<any>,
+        requiredElement: React.Element,
+        requiredMessage: Message,
+        requiredEnum: 'News' | 'Photos',
+        requiredUnion: string | number | Message,
+        requiredArrayOf: Array<number>,
+        requiredObjectOf: Object<number>,
+        requiredObjectWithShape: {
+          color: string,
+          fontSize: number,
+        },
+      };
+
+      export function Button(props: Props) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow transforms something that just looks like React class 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+      import PureComponent from '../PureComponent';
+
+      export type Props = { optionalArray?: Array<any> };
+
+      class Test extends PureComponent {
+        props: Props;
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default Test;
+    "
+`;
