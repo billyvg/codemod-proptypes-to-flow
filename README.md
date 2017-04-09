@@ -1,5 +1,5 @@
 # codemod-proptypes-to-flow [![Build Status](https://travis-ci.org/billyvg/codemod-proptypes-to-flow.svg?branch=master)](https://travis-ci.org/billyvg/codemod-proptypes-to-flow)
-Removes `React.PropTypes` and attempts to transform to [Flow](http://flowtype.org/).
+Removes `React.PropTypes` and attempts to transform to [Flow](http://flow.org/).
 
 ### Setup & Run
   * `npm install -g jscodeshift`
