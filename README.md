@@ -12,3 +12,6 @@ Removes `React.PropTypes` and attempts to transform to [Flow](http://flowtype.or
   * Custom validators
   * `React.createClass`
   * Use of importing PropTypes
+
+### Contributors
+  * Thanks to [@skovhus](https://github.com/skovhus) for adding support for functional components and modernizing the codebase a bit (a lot)
