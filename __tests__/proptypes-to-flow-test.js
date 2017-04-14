@@ -432,4 +432,17 @@ describe('React.PropTypes to flow', () => {
     expect(transformString(input)).toMatchSnapshot();
   });
 
+  it('handles functional components with expression body', () => {
+    const input = `
+      import React, { PropTypes } from 'react';
+      const MyComponent = ({ hello }) => <div>{hello}</div>;
+      MyComponent.propTypes = {
+        hello: PropTypes.string.isRequired,
+      };
+      export default MyComponent;
+    `;
+
+    expect(transformString(input)).toMatchSnapshot();
+  });
+
 });

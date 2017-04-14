@@ -92,6 +92,19 @@ exports[`React.PropTypes to flow does not touch non React classes 1`] = `
     "
 `;
 
+exports[`React.PropTypes to flow handles functional components with expression body 1`] = `
+"
+      /* @flow */
+      import React, { PropTypes } from 'react';
+      export type Props = { hello: string };
+      const MyComponent = (props: Props) => {
+        const { hello } = props;
+        return <div>{hello}</div>;
+      };
+      export default MyComponent;
+    "
+`;
+
 exports[`React.PropTypes to flow preserves comments 1`] = `
 "
       /* @flow */
