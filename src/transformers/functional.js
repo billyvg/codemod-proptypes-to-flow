@@ -48,7 +48,15 @@ function insertTypeIdentifierInFunction(functionPath, j, typeIdentifier) {
       'const',
       [j.variableDeclarator(param, j.identifier('props'))]
     );
-    functionRoot.body.body.unshift(newSpread);
+
+    // if the body of the function is an expression, we need to construct
+    // a block statement to hold the props spread
+    if (functionRoot.body.type === 'BlockStatement') {
+      functionRoot.body.body.unshift(newSpread);
+    } else {
+      const returnExpression = j.returnStatement(functionRoot.body);
+      functionRoot.body = j.blockStatement([newSpread, returnExpression]);
+    }
   }
 }
 
