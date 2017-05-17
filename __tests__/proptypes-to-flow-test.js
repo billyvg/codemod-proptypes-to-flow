@@ -445,4 +445,21 @@ describe('React.PropTypes to flow', () => {
     expect(transformString(input)).toMatchSnapshot();
   });
 
+  it('handles block comments', () => {
+    const input = `
+      import React from 'react';
+
+      export default class Test extends React.Component {
+        static propTypes = {
+          /**
+           * block comment
+           */
+          optionalArray: React.PropTypes.array,
+          anotherProp: React.PropTypes.string,
+        };
+      }
+    `;
+
+    expect(transformString(input)).toMatchSnapshot();
+  });
 });

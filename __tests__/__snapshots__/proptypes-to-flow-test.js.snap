@@ -92,6 +92,25 @@ exports[`React.PropTypes to flow does not touch non React classes 1`] = `
     "
 `;
 
+exports[`React.PropTypes to flow handles block comments 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+
+      export type Props = {
+        /**
+         * block comment
+         */
+        optionalArray?: Array<any>,
+        anotherProp?: string,
+      };
+
+      export default class Test extends React.Component {
+        props: Props;
+      }
+    "
+`;
+
 exports[`React.PropTypes to flow handles functional components with expression body 1`] = `
 "
       /* @flow */
