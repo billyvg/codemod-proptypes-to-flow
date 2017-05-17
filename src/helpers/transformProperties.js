@@ -8,4 +8,3 @@ export default function transformProperties(j, properties) {
     return type;
   });
 }
-

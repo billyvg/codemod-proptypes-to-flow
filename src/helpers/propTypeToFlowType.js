@@ -7,7 +7,7 @@ export default function propTypeToFlowType(j, key, value) {
    * @param {Node} node NodePath Should be the `value` of a `Property`
    * @return {Object} Object with `required`, and `node`
    */
-  const getExpressionWithoutRequired = (inputNode) => {
+  const getExpressionWithoutRequired = inputNode => {
     // check if it's required
     let required = false;
     let node = inputNode;
@@ -26,14 +26,13 @@ export default function propTypeToFlowType(j, key, value) {
   /**
    * Gets the PropType MemberExpression without `React` namespace
    */
-  const getPropTypeExpression = (inputNode) => {
-    if (inputNode.object &&
-        inputNode.object.object &&
-        inputNode.object.object.name === 'React') {
-      return j.memberExpression(
-        inputNode.object.property,
-        inputNode.property
-      );
+  const getPropTypeExpression = inputNode => {
+    if (
+      inputNode.object &&
+      inputNode.object.object &&
+      inputNode.object.object.name === 'React'
+    ) {
+      return j.memberExpression(inputNode.object.property, inputNode.property);
     } else if (inputNode.object && inputNode.object.name === 'React') {
       return inputNode.property;
     }
@@ -49,9 +48,8 @@ export default function propTypeToFlowType(j, key, value) {
     string: j.stringTypeAnnotation(),
     str: j.stringTypeAnnotation(),
     array: j.genericTypeAnnotation(
-      j.identifier('Array'), j.typeParameterInstantiation(
-        [j.anyTypeAnnotation()]
-      )
+      j.identifier('Array'),
+      j.typeParameterInstantiation([j.anyTypeAnnotation()])
     ),
     element: j.genericTypeAnnotation(
       j.qualifiedTypeIdentifier(j.identifier('React'), j.identifier('Element')),
@@ -61,13 +59,15 @@ export default function propTypeToFlowType(j, key, value) {
       j.numberTypeAnnotation(),
       j.stringTypeAnnotation(),
       j.genericTypeAnnotation(
-        j.qualifiedTypeIdentifier(j.identifier('React'), j.identifier('Element')),
+        j.qualifiedTypeIdentifier(
+          j.identifier('React'),
+          j.identifier('Element')
+        ),
         null
       ),
       j.genericTypeAnnotation(
-        j.identifier('Array'), j.typeParameterInstantiation(
-          [j.anyTypeAnnotation()]
-        )
+        j.identifier('Array'),
+        j.typeParameterInstantiation([j.anyTypeAnnotation()])
       ),
     ]),
   };
@@ -84,7 +84,6 @@ export default function propTypeToFlowType(j, key, value) {
     node.callee = getPropTypeExpression(node.callee);
   }
 
-
   if (node.type === 'Literal') {
     returnValue = j.stringLiteralTypeAnnotation(node.value, node.raw);
   } else if (node.type === 'MemberExpression') {
@@ -96,20 +95,32 @@ export default function propTypeToFlowType(j, key, value) {
       returnValue = j.genericTypeAnnotation(node.arguments[0], null);
     } else if (name === 'arrayOf') {
       returnValue = j.genericTypeAnnotation(
-        j.identifier('Array'), j.typeParameterInstantiation(
-          [propTypeToFlowType(j, null, node.arguments[0] || j.anyTypeAnnotation())]
-        )
+        j.identifier('Array'),
+        j.typeParameterInstantiation([
+          propTypeToFlowType(
+            j,
+            null,
+            node.arguments[0] || j.anyTypeAnnotation()
+          ),
+        ])
       );
     } else if (name === 'objectOf') {
       // TODO: Is there a direct Flow translation for this?
       returnValue = j.genericTypeAnnotation(
-        j.identifier('Object'), j.typeParameterInstantiation(
-          [propTypeToFlowType(j, null, node.arguments[0] || j.anyTypeAnnotation())]
-        )
+        j.identifier('Object'),
+        j.typeParameterInstantiation([
+          propTypeToFlowType(
+            j,
+            null,
+            node.arguments[0] || j.anyTypeAnnotation()
+          ),
+        ])
       );
     } else if (name === 'shape') {
       returnValue = j.objectTypeAnnotation(
-        node.arguments[0].properties.map(arg => propTypeToFlowType(j, arg.key, arg.value))
+        node.arguments[0].properties.map(arg =>
+          propTypeToFlowType(j, arg.key, arg.value)
+        )
       );
     } else if (name === 'oneOfType' || name === 'oneOf') {
       returnValue = j.unionTypeAnnotation(

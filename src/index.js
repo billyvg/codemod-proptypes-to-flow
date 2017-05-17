@@ -6,9 +6,8 @@ function addFlowComment(j, ast) {
   const getBodyNode = () => ast.find(j.Program).get('body', 0).node;
 
   const comments = getBodyNode().comments || [];
-  const containsFlowComment = comments
-    .filter(e => e.value.indexOf('@flow') !== -1)
-    .length > 0;
+  const containsFlowComment =
+    comments.filter(e => e.value.indexOf('@flow') !== -1).length > 0;
 
   if (!containsFlowComment) {
     comments.unshift(j.commentBlock(' @flow '));
@@ -31,7 +30,7 @@ export default function transformer(file, api) {
 
   if (classModifications || functionalModifications) {
     addFlowComment(j, root);
-    return root.toSource({quote: 'single', trailingComma: true });
+    return root.toSource({ quote: 'single', trailingComma: true });
   } else {
     return file.source;
   }

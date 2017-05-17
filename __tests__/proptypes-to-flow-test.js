@@ -4,7 +4,7 @@ const jscodeshift = require('jscodeshift');
 const transform = require('../src/index').default;
 
 const transformString = (source, path = 'test.js') => {
-  return transform({path, source}, {jscodeshift}, {});
+  return transform({ path, source }, { jscodeshift }, {});
 };
 
 describe('React.PropTypes to flow', () => {

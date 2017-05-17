@@ -38,12 +38,11 @@ module.exports = function(j) {
       .filter(declarator => declarator.value.source.value === module)
       .size() === 1;
 
-  const hasReact = path => (
+  const hasReact = path =>
     hasModule(path, 'React') ||
     hasModule(path, 'react') ||
     hasModule(path, 'react/addons') ||
-    hasModule(path, 'react-native')
-  );
+    hasModule(path, 'react-native');
 
   // ---------------------------------------------------------------------------
   // Finds all variable declarations that call React.createClass
@@ -67,27 +66,26 @@ module.exports = function(j) {
     });
 
   const findReactCreateClassModuleExports = path =>
-    path
-      .find(j.AssignmentExpression, {
-        left: {
-          type: 'MemberExpression',
-          object: {
-            type: 'Identifier',
-            name: 'module',
-          },
-          property: {
-            type: 'Identifier',
-            name: 'exports',
-          },
+    path.find(j.AssignmentExpression, {
+      left: {
+        type: 'MemberExpression',
+        object: {
+          type: 'Identifier',
+          name: 'module',
         },
-        right: {
-          type: 'CallExpression',
-          callee: REACT_CREATE_CLASS_MEMBER_EXPRESSION,
+        property: {
+          type: 'Identifier',
+          name: 'exports',
         },
-      });
+      },
+      right: {
+        type: 'CallExpression',
+        callee: REACT_CREATE_CLASS_MEMBER_EXPRESSION,
+      },
+    });
 
   const getReactCreateClassSpec = classPath => {
-    const {value} = classPath;
+    const { value } = classPath;
     const args = (value.init || value.right || value.declaration).arguments;
     if (args && args.length) {
       const spec = args[0];
@@ -117,12 +115,11 @@ module.exports = function(j) {
           type: 'Identifier',
           name: 'Component',
         },
-      }).at(0);
+      })
+      .at(0);
 
     const paths = componentImportSpecifier.paths();
-    return paths.length
-      ? paths[0].value.local.name
-      : undefined;
+    return paths.length ? paths[0].value.local.name : undefined;
   };
 
   // Finds all classes that extend React.Component
@@ -130,27 +127,26 @@ module.exports = function(j) {
     const componentImport = findReactComponentName(path);
     const selector = componentImport
       ? {
-        superClass: {
-          type: 'Identifier',
-          name: componentImport,
-        },
-      }
+          superClass: {
+            type: 'Identifier',
+            name: componentImport,
+          },
+        }
       : {
-        superClass: {
-          type: 'MemberExpression',
-          object: {
-            type: 'Identifier',
-            name: 'React',
+          superClass: {
+            type: 'MemberExpression',
+            object: {
+              type: 'Identifier',
+              name: 'React',
+            },
+            property: {
+              type: 'Identifier',
+              name: 'Component',
+            },
           },
-          property: {
-            type: 'Identifier',
-            name: 'Component',
-          },
-        },
-      };
+        };
 
-    return path
-     .find(j.ClassDeclaration, selector);
+    return path.find(j.ClassDeclaration, selector);
   };
 
   // ---------------------------------------------------------------------------
@@ -185,8 +181,8 @@ module.exports = function(j) {
       [j.objectExpression(properties)]
     );
 
-  const getComponentName =
-    classPath => classPath.node.id && classPath.node.id.name;
+  const getComponentName = classPath =>
+    classPath.node.id && classPath.node.id.name;
 
   // ---------------------------------------------------------------------------
   // Direct methods! (see explanation below)
@@ -218,7 +214,10 @@ module.exports = function(j) {
       value.type === 'ArrayExpression' &&
       Array.isArray(value.elements) &&
       value.elements.every(elem => elem.type === 'Identifier') &&
-      containSameElements(value.elements.map(elem => elem.name), mixinIdentifierNames)
+      containSameElements(
+        value.elements.map(elem => elem.name),
+        mixinIdentifierNames
+      )
     );
   };
 
@@ -257,7 +256,12 @@ module.exports = function(j) {
 
   const directlyHasSpecificMixins = (classPath, mixinIdentifierNames) => {
     const spec = directlyGetCreateClassSpec(classPath);
-    return spec && spec.properties.some(prop => isSpecificMixinsProperty(prop, mixinIdentifierNames));
+    return (
+      spec &&
+      spec.properties.some(prop =>
+        isSpecificMixinsProperty(prop, mixinIdentifierNames)
+      )
+    );
   };
 
   return {

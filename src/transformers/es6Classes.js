@@ -5,11 +5,13 @@ import findParentBody from '../helpers/findParentBody';
 import transformProperties from '../helpers/transformProperties';
 import ReactUtils from '../helpers/ReactUtils';
 
-const isStaticPropType = (p) => {
-  return p.type === 'ClassProperty' &&
+const isStaticPropType = p => {
+  return (
+    p.type === 'ClassProperty' &&
     p.static &&
     p.key.type === 'Identifier' &&
-    p.key.name === 'propTypes';
+    p.key.name === 'propTypes'
+  );
 };
 
 /**
@@ -28,82 +30,92 @@ export default function transformEs6Classes(ast, j) {
   const reactClassPaths = ast.find(j.ClassDeclaration);
 
   // find classes with propType static class property
-  const modifications = reactClassPaths.forEach(p => {
-    const className = reactUtils.getComponentName(p);
-    const propIdentifier = reactClassPaths.length === 1 ? 'Props' : `${className}Props`;
-    let properties;
+  const modifications = reactClassPaths
+    .forEach(p => {
+      const className = reactUtils.getComponentName(p);
+      const propIdentifier = reactClassPaths.length === 1
+        ? 'Props'
+        : `${className}Props`;
+      let properties;
 
-    const classBody = p.value.body && p.value.body.body;
-    if (classBody) {
-      annotateConstructor(j, classBody, propIdentifier);
-      const index = findIndex(classBody, isStaticPropType);
-      if (typeof index !== 'undefined') {
-        const classProperty = classBody.splice(index, 1).pop();
-        properties = classProperty.value.properties;
-      } else {
-        // look for propTypes defined elsewhere
-        classNamesWithPropsOutside.push(className);
+      const classBody = p.value.body && p.value.body.body;
+      if (classBody) {
+        annotateConstructor(j, classBody, propIdentifier);
+        const index = findIndex(classBody, isStaticPropType);
+        if (typeof index !== 'undefined') {
+          const classProperty = classBody.splice(index, 1).pop();
+          properties = classProperty.value.properties;
+        } else {
+          // look for propTypes defined elsewhere
+          classNamesWithPropsOutside.push(className);
 
-        ast.find(j.AssignmentExpression, {
-          left: {
-            type: 'MemberExpression',
-            object: {
-              name: className,
-            },
-            property: {
-              name: 'propTypes',
-            },
-          },
-          right: {
-            type: 'ObjectExpression',
-          },
-        })
-        .forEach(p => {
-          // this should only be one?
-          properties = p.value.right.properties;
-        })
-        .remove();
-      }
-
-      properties = properties || [];
-      const typeAlias = createTypeAlias(
-        j, transformProperties(j, properties), {
-          name: propIdentifier,
-          shouldExport: true,
+          ast
+            .find(j.AssignmentExpression, {
+              left: {
+                type: 'MemberExpression',
+                object: {
+                  name: className,
+                },
+                property: {
+                  name: 'propTypes',
+                },
+              },
+              right: {
+                type: 'ObjectExpression',
+              },
+            })
+            .forEach(p => {
+              // this should only be one?
+              properties = p.value.right.properties;
+            })
+            .remove();
         }
-      );
 
-      // Find location to put propTypes flowtype definition
-      // This will place ahead of class def
-      const {
-        child,
-        body,
-      } = findParentBody(p);
-      if (body && child) {
-        const bodyIndex = findIndex(body.value, (b) => b === child);
-        if (bodyIndex) {
-          body.value.splice(bodyIndex, 0, typeAlias);
+        properties = properties || [];
+        const typeAlias = createTypeAlias(
+          j,
+          transformProperties(j, properties),
+          {
+            name: propIdentifier,
+            shouldExport: true,
+          }
+        );
+
+        // Find location to put propTypes flowtype definition
+        // This will place ahead of class def
+        const { child, body } = findParentBody(p);
+        if (body && child) {
+          const bodyIndex = findIndex(body.value, b => b === child);
+          if (bodyIndex) {
+            body.value.splice(bodyIndex, 0, typeAlias);
+          }
         }
       }
-    }
-  }).size();
+    })
+    .size();
 
-  ast.find(j.ExpressionStatement, {
-    expression: {
-      type: 'AssignmentExpression',
-      left: {
-        type: 'MemberExpression',
-        property: {
-          name: 'propTypes',
+  ast
+    .find(j.ExpressionStatement, {
+      expression: {
+        type: 'AssignmentExpression',
+        left: {
+          type: 'MemberExpression',
+          property: {
+            name: 'propTypes',
+          },
+        },
+        right: {
+          type: 'ObjectExpression',
         },
       },
-      right: {
-        type: 'ObjectExpression',
-      },
-    },
-  })
-  .filter(p => classNamesWithPropsOutside.indexOf(p.value.expression.left.object.name) > -1)
-  .remove();
+    })
+    .filter(
+      p =>
+        classNamesWithPropsOutside.indexOf(
+          p.value.expression.left.object.name
+        ) > -1
+    )
+    .remove();
 
   return modifications > 0;
 }
