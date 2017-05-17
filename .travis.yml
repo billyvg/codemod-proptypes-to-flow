@@ -11,10 +11,11 @@ script:
   - npm prune
   - npm update
   - npm run prepublish
+  - codecov
 
 cache:
   directories:
     - node_modules
 
 after_success:
-  - codecov
+  - bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
