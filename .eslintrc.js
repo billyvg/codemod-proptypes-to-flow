@@ -9,7 +9,7 @@ module.exports = {
     'import/order': ['error', {
       'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
     }],
-    'indent': ['error', 2, {'SwitchCase': 1}],
+    'indent': ['off', 2, {'SwitchCase': 1}],
     'max-len': ['error', 120, 4, {'ignoreComments': true, 'ignoreUrls': true}],
     'no-unused-vars': ['error', {'vars': 'all', 'args': 'none'}],
     'space-before-function-paren': ['error', 'never'],
