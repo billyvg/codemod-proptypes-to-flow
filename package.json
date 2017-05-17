@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "check": "npm run lint && npm run test:coverage",
-    "prepublish": "npm run check && npm run build",
+    "prepublishOnly": "npm run check && npm run build",
     "precommit": "lint-staged",
     "lint": "eslint src __tests__",
     "pretty": "prettier --trailing-comma es5 --single-quote",
