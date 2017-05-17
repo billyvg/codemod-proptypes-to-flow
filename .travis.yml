@@ -3,16 +3,18 @@ node_js:
   - '7'
   - '6'
   - '4'
-script:
-  - npm prune
-  - npm update
-  - npm run prepublish
-cache:
-  directories:
-    - node_modules
 
 before_install:
   - npm install -g codecov
 
-after_succes:
+script:
+  - npm prune
+  - npm update
+  - npm run prepublish
+
+cache:
+  directories:
+    - node_modules
+
+after_success:
   - codecov
