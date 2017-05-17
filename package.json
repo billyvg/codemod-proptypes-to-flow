@@ -49,8 +49,8 @@
   },
   "lint-staged": {
     "*.js": [
-      "pretty --write",
-      "test --bail --findRelatedTests"
+      "npm run pretty --write",
+      "npm run test --bail --findRelatedTests"
     ]
   },
   "jest": {
