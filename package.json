@@ -7,7 +7,10 @@
     "build": "babel src --out-dir lib",
     "check": "npm run lint && npm run test:coverage",
     "prepublish": "npm run check && npm run build",
-    "lint": "eslint src __tests__ --fix",
+    "precommit": "lint-staged",
+    "lint": "eslint src __tests__",
+    "pretty": "prettier --trailing-comma es5 --single-quote",
+    "pretty-fix": "npm run pretty -- --write src/**/*.js __tests__/**/*.js",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
@@ -38,8 +41,17 @@
     "eslint": "^3.9.1",
     "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
+    "husky": "^0.13.3",
     "jest": "^19.0.2",
-    "jscodeshift": "^0.3.30"
+    "jscodeshift": "^0.3.30",
+    "lint-staged": "^3.4.1",
+    "prettier": "^1.3.1"
+  },
+  "lint-staged": {
+    "*.js": [
+      "pretty --write",
+      "test --bail --findRelatedTests"
+    ]
   },
   "jest": {
     "collectCoverageFrom": [
