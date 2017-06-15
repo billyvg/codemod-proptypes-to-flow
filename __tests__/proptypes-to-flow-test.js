@@ -462,4 +462,29 @@ describe('React.PropTypes to flow', () => {
 
     expect(transformString(input)).toMatchSnapshot();
   });
+
+  it('does not touch files with flow Props already declared', () => {
+    const input = `
+      /* @flow */
+      import React from 'react';
+
+      export type Props = {
+        created_at?: string,
+      };
+
+      class MyComponent extends React.Component {
+        props: Props;
+
+        render() {
+          return (
+            <div />
+          );
+        }
+      }
+
+      export default MyComponent;
+    `;
+
+    expect(transformString(input)).toMatchSnapshot();
+  });
 });
