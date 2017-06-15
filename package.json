@@ -5,12 +5,11 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "check": "npm run lint && npm run test:coverage",
+    "check": "npm run lint:bail && npm run test:coverage",
     "prepublishOnly": "npm run check && npm run build",
     "precommit": "lint-staged",
-    "lint": "eslint src __tests__",
-    "pretty": "prettier --trailing-comma es5 --single-quote",
-    "pretty-fix": "npm run pretty -- --write src/**/*.js __tests__/**/*.js",
+    "lint:bail": "eslint src __tests__",
+    "lint": "eslint src __tests__ --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
@@ -40,7 +39,9 @@
     "babel-preset-stage-0": "^6.16.0",
     "eslint": "^3.9.1",
     "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-config-prettier": "^2.1.1",
     "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-prettier": "^2.1.2",
     "husky": "^0.13.3",
     "jest": "^19.0.2",
     "jscodeshift": "^0.3.30",
@@ -49,7 +50,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run pretty --write",
+      "eslint --fix",
       "npm run test --bail --findRelatedTests"
     ]
   },

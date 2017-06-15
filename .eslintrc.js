@@ -1,9 +1,15 @@
 module.exports = {
-  extends: 'airbnb-base',
+  extends: [
+    'airbnb-base',
+    'prettier',
+  ],
   env: {
     'node': true,
   },
   root: true,
+  plugins: [
+    'prettier',
+  ],
   rules: {
     'comma-dangle': ['error', 'always-multiline'],
     'import/order': ['error', {
@@ -18,6 +24,8 @@ module.exports = {
     'no-param-reassign': 'off',
     'no-console': 'off',
     'no-warning-comments': ['warn', { 'terms': ['fixme'], 'location': 'start' }],
+
+    'prettier/prettier': ['error', {'trailingComma': 'es5', 'singleQuote': true} ],
 
     // NOTE: Disabled to not do too many changes to original codebase:
     'consistent-return': 'off',
