@@ -10,8 +10,8 @@ before_install:
 script:
   - npm prune
   - npm update
+  - npm run check
   - npm run build
-  - npm run test:coverage
   - codecov
 
 cache:
