@@ -8,15 +8,11 @@ before_install:
   - npm install -g codecov
 
 script:
-  - npm prune
-  - npm update
-  - npm run check
-  - npm run build
+  - yarn run check
+  - yarn run build
   - codecov
 
-cache:
-  directories:
-    - node_modules
+cache: yarn
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
