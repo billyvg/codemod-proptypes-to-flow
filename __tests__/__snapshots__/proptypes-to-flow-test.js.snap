@@ -137,7 +137,7 @@ exports[`React.PropTypes to flow handles block comments 1`] = `
 exports[`React.PropTypes to flow handles functional components with expression body 1`] = `
 "
       /* @flow */
-      import React, { PropTypes } from 'react';
+      import React from 'react';
       export type Props = { hello: string };
       const MyComponent = (props: Props) => {
         const { hello } = props;
@@ -189,6 +189,42 @@ exports[`React.PropTypes to flow preserves comments 1`] = `
         // A value of any data type
         requiredAny: any,
       };
+
+      function Button(props: Props) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow removes react's 16 PropTypes import 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+
+      export type Props = {
+        optionalArray?: Array<any>,
+        optionalBool?: boolean,
+      };
+
+      function Button(props: Props) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+    "
+`;
+
+exports[`React.PropTypes to flow removes react's 16 destructured PropTypes import 1`] = `
+"
+      /* @flow */
+      import React from 'react';
+      export type Props = { optionalArray?: Array<any> };
 
       function Button(props: Props) {
         return (
@@ -304,7 +340,7 @@ exports[`React.PropTypes to flow transforms optional PropTypes prefixed with \`R
 exports[`React.PropTypes to flow transforms optional PropTypes with no \`React\` prefix 1`] = `
 "
       /* @flow */
-      import React, { PropTypes } from 'react';
+      import React from 'react';
 
       export type Props = {
         optionalArray?: Array<any>,
@@ -386,7 +422,7 @@ exports[`React.PropTypes to flow transforms required PropTypes prefixed with \`R
 exports[`React.PropTypes to flow transforms required PropTypes with no \`React\` prefix 1`] = `
 "
       /* @flow */
-      import React, { PropTypes } from 'react';
+      import React from 'react';
 
       export type Props = {
         requiredArray: Array<any>,

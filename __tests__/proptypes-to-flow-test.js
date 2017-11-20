@@ -136,6 +136,49 @@ describe('React.PropTypes to flow', () => {
     expect(transformString(input)).toMatchSnapshot();
   });
 
+  it("removes react's 16 PropTypes import", () => {
+    const input = `
+      import React from 'react';
+      import PropTypes from 'prop-types';
+
+      function Button(props) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+
+      Button.propTypes = {
+        optionalArray: PropTypes.array,
+        optionalBool: PropTypes.bool,
+      };
+    `;
+
+    expect(transformString(input)).toMatchSnapshot();
+  });
+
+  it("removes react's 16 destructured PropTypes import", () => {
+    const input = `
+      import React from 'react';
+      import { bool, array } from 'prop-types';
+
+      function Button(props) {
+        return (
+          <button>
+            {React.Children.toArray(children)}
+          </button>
+        );
+      }
+
+      Button.propTypes = {
+        optionalArray: PropTypes.array,
+      };
+    `;
+
+    expect(transformString(input)).toMatchSnapshot();
+  });
+
   it('transforms required PropTypes with no `React` prefix', () => {
     const input = `
       import React, { PropTypes } from 'react';
