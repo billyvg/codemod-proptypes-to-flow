@@ -90,7 +90,7 @@ export default function propTypeToFlowType(j, key, value) {
     returnValue = TRANSFORM_MAP[node.property.name];
   } else if (node.type === 'CallExpression') {
     // instanceOf(), arrayOf(), etc..
-    const name = node.callee.property.name;
+    const name = node.callee.name;
     if (name === 'instanceOf') {
       returnValue = j.genericTypeAnnotation(node.arguments[0], null);
     } else if (name === 'arrayOf') {
