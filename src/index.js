@@ -10,20 +10,13 @@ function addFlowComment(j, ast, options) {
     comments.filter(e => e.value.indexOf('@flow') !== -1).length > 0;
 
   if (!containsFlowComment) {
-    function unshiftFlowCommentLine() {
-      comments.unshift(j.commentLine(' @flow'));
-    }
-  
-    function unshiftFlowCommentBlock() {
-      comments.unshift(j.commentBlock(' @flow '));
-    }
-
     switch (options.flowComment) {
       case 'line':
-        unshiftFlowCommentLine(comments);
+        comments.unshift(j.commentLine(' @flow'));
         break;
       case 'block':
-        unshiftFlowCommentBlock(comments);
+      default:
+        comments.unshift(j.commentBlock(' @flow '));
         break;
     }
   }
@@ -38,13 +31,15 @@ export default function transformer(file, api, rawOptions) {
   const options = rawOptions;
   if (options.flowComment !== 'line' && options.flowComment !== 'block') {
     if (options.flowComment) {
-      console.warn('Unsupported flowComment value provided: ${options.flowComment}.');
+      console.warn(
+        `Unsupported flowComment value provided: ${options.flowComment}`
+      );
       console.warn('Supported options are "block" and "line".');
       console.warn('Falling back to default: "block".');
     }
     options.flowComment = 'block';
   }
-  if (options.propsTypeSuffix == undefined) {
+  if (!options.propsTypeSuffix) {
     options.propsTypeSuffix = 'Props';
   }
 
@@ -54,7 +49,11 @@ export default function transformer(file, api, rawOptions) {
   }
 
   const classModifications = transformEs6ClassComponents(root, j, options);
-  const functionalModifications = transformFunctionalComponents(root, j, options);
+  const functionalModifications = transformFunctionalComponents(
+    root,
+    j,
+    options
+  );
 
   if (classModifications || functionalModifications) {
     addFlowComment(j, root, options);
