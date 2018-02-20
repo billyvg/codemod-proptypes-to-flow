@@ -15,8 +15,8 @@ function addFlowComment(j, ast, options) {
     }
   
     function unshiftFlowCommentBlock() {
-    comments.unshift(j.commentBlock(' @flow '));
-  }
+      comments.unshift(j.commentBlock(' @flow '));
+    }
 
     switch (options.flowComment) {
       case 'line':
@@ -44,14 +44,17 @@ export default function transformer(file, api, rawOptions) {
     }
     options.flowComment = 'block';
   }
+  if (options.propsTypeSuffix == undefined) {
+    options.propsTypeSuffix = 'Props';
+  }
 
   const reactUtils = ReactUtils(j);
   if (!reactUtils.hasReact(root)) {
     return file.source;
   }
 
-  const classModifications = transformEs6ClassComponents(root, j);
-  const functionalModifications = transformFunctionalComponents(root, j);
+  const classModifications = transformEs6ClassComponents(root, j, options);
+  const functionalModifications = transformFunctionalComponents(root, j, options);
 
   if (classModifications || functionalModifications) {
     addFlowComment(j, root, options);
