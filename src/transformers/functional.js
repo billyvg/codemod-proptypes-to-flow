@@ -65,7 +65,7 @@ function insertTypeIdentifierInFunction(functionPath, j, typeIdentifier) {
  * Transforms function components
  * @return true if any functional components were transformed.
  */
-export default function transformFunctionalComponents(ast, j) {
+export default function transformFunctionalComponents(ast, j, options) {
   // Look for Foo.propTypes
   const componentToPropTypesRemoved = removeComponentAssignmentPropTypes(
     ast,
@@ -79,7 +79,9 @@ export default function transformFunctionalComponents(ast, j) {
 
   components.forEach(c => {
     const flowTypesRemoved = componentToPropTypesRemoved[c];
-    const propIdentifier = components.length === 1 ? 'Props' : `${c}Props`;
+    const propIdentifier = components.length === 1
+      ? options.propsTypeSuffix
+      : `${c}${options.propsTypeSuffix}`;
     const flowTypeProps = j.exportNamedDeclaration(
       j.typeAlias(
         j.identifier(propIdentifier),

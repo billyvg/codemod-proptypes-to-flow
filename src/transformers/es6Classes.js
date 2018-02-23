@@ -24,7 +24,7 @@ function containsFlowProps(classBody) {
  * Transforms es2016 components
  * @return true if any components were transformed.
  */
-export default function transformEs6Classes(ast, j) {
+export default function transformEs6Classes(ast, j, options) {
   const reactUtils = ReactUtils(j);
 
   const classNamesWithPropsOutside = [];
@@ -40,8 +40,8 @@ export default function transformEs6Classes(ast, j) {
     .forEach(p => {
       const className = reactUtils.getComponentName(p);
       const propIdentifier = reactClassPaths.length === 1
-        ? 'Props'
-        : `${className}Props`;
+        ? options.propsTypeSuffix
+        : `${className}${options.propsTypeSuffix}`;
       let properties;
 
       const classBody = p.value.body && p.value.body.body;
