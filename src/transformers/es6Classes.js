@@ -4,6 +4,7 @@ import findIndex from '../helpers/findIndex';
 import findParentBody from '../helpers/findParentBody';
 import transformProperties from '../helpers/transformProperties';
 import ReactUtils from '../helpers/ReactUtils';
+import removePropTypeImportDeclaration from '../helpers/removePropTypeImport';
 
 const isStaticPropType = p => {
   return (
@@ -126,6 +127,8 @@ export default function transformEs6Classes(ast, j, options) {
         ) > -1
     )
     .remove();
+
+  removePropTypeImportDeclaration(j, ast);
 
   return modifications > 0;
 }
