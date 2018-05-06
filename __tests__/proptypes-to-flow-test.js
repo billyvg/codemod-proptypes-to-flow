@@ -506,6 +506,30 @@ describe('React.PropTypes to flow', () => {
     expect(transformString(input)).toMatchSnapshot();
   });
 
+  it('handles presence of defaultProps', () => {
+    const input = `
+      import React from 'react';
+
+      export default class Test extends React.Component {
+        static propTypes = {
+          /**
+           * block comment
+           */
+          optionalArray: React.PropTypes.array,
+          anotherProp: React.PropTypes.string,
+        };
+
+        static defaultProps = {
+          anotherProp: ''
+        };
+      }
+    `;
+
+    const output = transformString(input);
+    expect(output).toContain('type Props =');
+    expect(output).toMatchSnapshot();
+  });
+
   it('does not touch files with flow Props already declared', () => {
     const input = `
       /* @flow */
