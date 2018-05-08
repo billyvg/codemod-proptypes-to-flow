@@ -16,9 +16,7 @@ const isStaticPropType = p => {
 };
 
 function containsFlowProps(classBody) {
-  return !!classBody.find(bodyElement =>
-    bodyElement.key.name.toLowerCase().includes('props')
-  );
+  return !!classBody.find(bodyElement => bodyElement.key.name === 'props');
 }
 
 /**
