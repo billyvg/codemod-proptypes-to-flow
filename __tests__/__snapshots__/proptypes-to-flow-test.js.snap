@@ -6,7 +6,7 @@ exports[`React.PropTypes to flow add empty PropTypes (no constructor) 1`] = `
       import React from 'react';
       import { View } from 'react-native';
 
-      export type Props = {};
+      type Props = {};
 
       class Cards extends React.Component {
         props: Props;
@@ -28,7 +28,7 @@ exports[`React.PropTypes to flow adds empty PropTypes (constructor) 1`] = `
       import { View } from 'react-native';
       import PureRenderMixin from 'react-addons-pure-render-mixin';
 
-      export type Props = {};
+      type Props = {};
 
       class PureComponent extends Component {
         constructor(props: Props) {
@@ -53,7 +53,7 @@ exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in c
       /* @flow */
       import React from 'react';
 
-      export type ComponentProps = {};
+      type ComponentProps = {};
 
       export default class Component extends React.Component {
         constructor(props: ComponentProps) {
@@ -66,7 +66,7 @@ exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in c
         }
       }
 
-      export type Component2Props = {};
+      type Component2Props = {};
 
       class Component2 extends React.Component {
         constructor(props: Component2Props) {
@@ -120,7 +120,7 @@ exports[`React.PropTypes to flow handles block comments 1`] = `
       /* @flow */
       import React from 'react';
 
-      export type Props = {
+      type Props = {
         /**
          * block comment
          */
@@ -152,7 +152,7 @@ exports[`React.PropTypes to flow handles presence of defaultProps 1`] = `
       /* @flow */
       import React from 'react';
 
-      export type Props = {
+      type Props = {
         /**
          * block comment
          */
@@ -264,7 +264,7 @@ exports[`React.PropTypes to flow transforms PropTypes that are a class property 
       /* @flow */
       import React from 'react';
 
-      export type Props = {
+      type Props = {
         optionalArray?: Array<any>,
         optionalBool?: boolean,
         optionalFunc?: Function,
@@ -300,7 +300,7 @@ exports[`React.PropTypes to flow transforms PropTypes that are defined outside o
       /* @flow */
       import React from 'react';
 
-      export type Props = {
+      type Props = {
         optionalArray?: Array<any>,
         optionalBool?: boolean,
         optionalFunc?: Function,
@@ -483,7 +483,7 @@ exports[`React.PropTypes to flow transforms something that just looks like React
       import React from 'react';
       import PureComponent from '../PureComponent';
 
-      export type Props = { optionalArray?: Array<any> };
+      type Props = { optionalArray?: Array<any> };
 
       class Test extends PureComponent {
         props: Props;

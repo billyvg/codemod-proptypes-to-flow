@@ -86,7 +86,7 @@ export default function transformEs6Classes(ast, j, options) {
           transformProperties(j, properties),
           {
             name: propIdentifier,
-            shouldExport: true,
+            shouldExport: false,
           }
         );
 
