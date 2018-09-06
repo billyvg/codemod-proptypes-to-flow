@@ -8,8 +8,7 @@ exports[`React.PropTypes to flow add empty PropTypes (no constructor) 1`] = `
 
       type Props = {};
 
-      class Cards extends React.Component {
-        props: Props;
+      class Cards extends React.Component<Props> {
         render() {
           return (
             <View />
@@ -30,13 +29,12 @@ exports[`React.PropTypes to flow adds empty PropTypes (constructor) 1`] = `
 
       type Props = {};
 
-      class PureComponent extends Component {
-        constructor(props: Props) {
+      class PureComponent extends Component<Props> {
+        constructor(props) {
           super(props);
 
           this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
         }
-        props: Props;
         render() {
           return (
             <View />
@@ -55,12 +53,10 @@ exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in c
 
       type ComponentProps = {};
 
-      export default class Component extends React.Component {
-        constructor(props: ComponentProps) {
+      export default class Component extends React.Component<ComponentProps> {
+        constructor(props) {
           super(props);
         }
-
-        props: ComponentProps;
 
         componentDidMount() {
         }
@@ -68,12 +64,10 @@ exports[`React.PropTypes to flow adds type annotation to \`prop\` parameter in c
 
       type Component2Props = {};
 
-      class Component2 extends React.Component {
-        constructor(props: Component2Props) {
+      class Component2 extends React.Component<Component2Props> {
+        constructor(props) {
           super(props);
         }
-
-        props: Component2Props;
 
         componentDidMount() {
         }
@@ -128,9 +122,7 @@ exports[`React.PropTypes to flow handles block comments 1`] = `
         anotherProp?: string,
       };
 
-      export default class Test extends React.Component {
-        props: Props;
-      }
+      export default class Test extends React.Component<Props> {}
     "
 `;
 
@@ -160,9 +152,7 @@ exports[`React.PropTypes to flow handles presence of defaultProps 1`] = `
         anotherProp?: string,
       };
 
-      export default class Test extends React.Component {
-        props: Props;
-
+      export default class Test extends React.Component<Props> {
         static defaultProps = {
           anotherProp: ''
         };
@@ -286,11 +276,10 @@ exports[`React.PropTypes to flow transforms PropTypes that are a class property 
         requiredAny: any,
       };
 
-      export default class Test extends React.Component {
-        constructor(props: Props) {
+      export default class Test extends React.Component<Props> {
+        constructor(props) {
           super(props);
         }
-        props: Props;
       }
     "
 `;
@@ -322,8 +311,7 @@ exports[`React.PropTypes to flow transforms PropTypes that are defined outside o
         requiredAny: any,
       };
 
-      export default class Test extends React.Component {
-        props: Props;
+      export default class Test extends React.Component<Props> {
         componentDidMount() {
         }
       }
@@ -485,8 +473,7 @@ exports[`React.PropTypes to flow transforms something that just looks like React
 
       type Props = { optionalArray?: Array<any> };
 
-      class Test extends PureComponent {
-        props: Props;
+      class Test extends PureComponent<Props> {
         render() {
           return (
             <div />
