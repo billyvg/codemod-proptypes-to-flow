@@ -49,7 +49,7 @@ export default function transformEs6Classes(ast, j, options) {
           return;
         }
 
-        annotateConstructor(j, classBody, propIdentifier);
+        annotateConstructor(j, p.value, propIdentifier);
         const index = findIndex(classBody, isStaticPropType);
         if (typeof index !== 'undefined') {
           const classProperty = classBody.splice(index, 1).pop();
